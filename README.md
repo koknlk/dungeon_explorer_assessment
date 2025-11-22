@@ -138,7 +138,6 @@ The application uses the following services for separation of concerns:
 * `UserRepository` – Handles database access for users.
 * `AdminSeeder` – Seeds initial admin account in the database.
 * `JwtService` – Handles JWT token generation, validation, and authentication.
-* `JwtOptionsValidator` – Validates JWT configuration.
 * `InputSanitizer` – Cleans user input to prevent XSS and unsafe characters.
 * `ResponseHandler` – Standardizes API responses.
 * `SecurityFlow` – Handles security validation, authentication, and authorization checks.
