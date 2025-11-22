@@ -1,0 +1,30 @@
+﻿version: '3.8'
+
+services:
+  dungeon-explorer-api:
+    build:
+      context: ./backend/DungeonExplorerBackend
+      dockerfile: Dockerfile
+    ports:
+      - "8088:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - JWT__Secret=${JWT__Secret}
+      - JWT__Issuer=${JWT__Issuer}
+      - JWT__Audience=${JWT__Audience}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    volumes:
+      - sqlite_data:/app/data
+
+  dungeon-explorer-ui:
+    build:
+      context: ./frontend/dungeon-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - dungeon-explorer-api
+
+volumes:
+  sqlite_data:

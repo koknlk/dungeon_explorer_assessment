@@ -1,30 +1,41 @@
+# IDE / Editor
 **/.classpath
-**/.dockerignore
-**/.env
-**/.git
-**/.gitignore
 **/.project
 **/.settings
 **/.toolstarget
 **/.vs
 **/.vscode
 **/*.*proj.user
-**/*.dbmdl
-**/*.jfm
-**/azds.yaml
-**/bin
-**/charts
-**/docker-compose*
-**/Dockerfile*
+
+# Node / npm
 **/node_modules
 **/npm-debug.log
+
+# Build / output
+**/bin
 **/obj
+
+# Docker / k8s
+**/.dockerignore
+**/azds.yaml
+**/charts
+
+# Environment / Secrets
+**/.env
 **/secrets.dev.yaml
 **/values.dev.yaml
-LICENSE
-README.md
-!**/.gitignore
-!.git/HEAD
-!.git/config
-!.git/packed-refs
-!.git/refs/heads/**
+
+# Database / Generated files
+**/*.dbmdl
+**/*.jfm
+
+# Keep Git tracked files
+!.gitignore
+
+# Optional: ignore local Dockerfiles but not committed ones
+# **/Dockerfile*
+# **/docker-compose*
+
+# Track important project files
+!README.md
+!LICENSE
