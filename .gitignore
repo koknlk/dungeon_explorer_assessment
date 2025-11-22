@@ -3,7 +3,8 @@
 **/.project
 **/.settings
 **/.toolstarget
-**/.vs
+# Ignore Visual Studio folders everywhere
+**/.vs/ 
 **/.vscode
 **/*.*proj.user
 
