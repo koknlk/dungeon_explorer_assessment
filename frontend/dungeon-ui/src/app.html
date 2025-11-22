@@ -1,0 +1,111 @@
+<template>
+  <require from="./style.css"></require>
+
+  <div class="container">
+
+    <!-- MAIN COLUMN -->
+    <div>
+      <h1>Dungeon Explorer SPA</h1>
+
+      <!-- LOGIN -->
+      <section class="card">
+        <h2>Login</h2>
+        <div class="form-row">
+          <label>Username</label>
+          <input value.bind="username" />
+        </div>
+        <div class="form-row">
+          <label>Password</label>
+          <input type="password" value.bind="password" />
+        </div>
+        <button class="btn" click.delegate="login()">Login</button>
+
+        <div if.bind="loginError" class="msg-error">${loginError}</div>
+        <div if.bind="loginSuccess" class="msg-success">${loginSuccess}</div>
+      </section>
+
+      <!-- CREATE DUNGEON -->
+      <section class="card">
+        <h2>Create Dungeon</h2>
+        <div class="form-row"><label>Name</label><input value.bind="dungeonName" /></div>
+        <div class="form-row"><label>Width</label><input type="number" value.bind="width" /></div>
+        <div class="form-row"><label>Height</label><input type="number" value.bind="height" /></div>
+        <div class="form-row"><label>Start X</label><input type="number" value.bind="startX" /></div>
+        <div class="form-row"><label>Start Y</label><input type="number" value.bind="startY" /></div>
+        <div class="form-row"><label>Goal X</label><input type="number" value.bind="goalX" /></div>
+        <div class="form-row"><label>Goal Y</label><input type="number" value.bind="goalY" /></div>
+
+        <h4>Obstacles</h4>
+        <div repeat.for="obstacle of obstacles" class="form-row">
+          <label>X</label>
+          <input type="number" value.bind="obstacle.x" />
+          <label>Y</label>
+          <input type="number" value.bind="obstacle.y" />
+          <button class="btn ghost small" click.delegate="removeObstacle(obstacle)">Remove</button>
+        </div>
+
+        <button class="btn ghost" click.delegate="addObstacle()">Add Obstacle</button>
+        <button class="btn" click.delegate="createDungeon()">Create Dungeon</button>
+
+        <div if.bind="createError" class="msg-error">
+          ${createError}
+          <div if.bind="createErrorDetails" class="msg-error-details"><small>${createErrorDetails}</small></div>
+        </div>
+        <div if.bind="createSuccess" class="msg-success">${createSuccess}</div>
+      </section>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <!-- FETCH -->
+      <section class="card">
+        <h2>Get Dungeon by ID</h2>
+        <div class="form-row">
+          <label>ID</label>
+          <input type="number" value.bind="fetchDungeonId" />
+          <button class="btn small" click.delegate="getDungeon()">Fetch</button>
+        </div>
+
+        <div if.bind="fetchError" class="msg-error">
+          ${fetchError}
+          <div if.bind="fetchErrorDetails" class="msg-error-details"><small>${fetchErrorDetails}</small></div>
+        </div>
+      </section>
+
+      <!-- DETAILS -->
+      <section class="card dungeon-details" if.bind="fetchedDungeon && fetchedDungeon.id">
+        <h2>Dungeon Details</h2>
+        <p><strong>ID:</strong> ${fetchedDungeon.id}</p>
+        <p><strong>Name:</strong> ${fetchedDungeon.name}</p>
+        <p><strong>Size:</strong> ${fetchedDungeon.width} x ${fetchedDungeon.height}</p>
+        <p><strong>Start:</strong> (${fetchedDungeon.start.x}, ${fetchedDungeon.start.y})</p>
+        <p><strong>Goal:</strong> (${fetchedDungeon.goal.x}, ${fetchedDungeon.goal.y})</p>
+
+        <h4>Obstacles</h4>
+        <ul>
+          <li repeat.for="o of fetchedDungeon.obstacles">(${o.x}, ${o.y})</li>
+        </ul>
+
+        <h4>Solution Path</h4>
+        <ul>
+          <li repeat.for="p of fetchedDungeon.solutions.path">(${p.x}, ${p.y})</li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- MAP -->
+    <div class="sidebar">
+      <section class="card" if.bind="fetchedDungeon && fetchedDungeon.id">
+        <h4>Dungeon Map</h4>
+        <div class="grid" style.bind="gridColumns">
+          <div repeat.for="row of dungeonGrid">
+            <div repeat.for="cell of row">
+              <div class="cell ${getCellClass($index, $parent.$index)}"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </div>
+</template>

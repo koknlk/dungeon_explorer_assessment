@@ -1,0 +1,6 @@
+@DungeonExplorerBackend_HostAddress = http://localhost:5209
+
+GET {{DungeonExplorerBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

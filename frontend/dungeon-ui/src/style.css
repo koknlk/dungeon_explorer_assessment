@@ -1,0 +1,171 @@
+/* src/styles.css */
+
+/* Page layout */
+:root {
+  --max-width: 980px;
+  --gap: 14px;
+  --accent: #2b7cff;
+  --muted: #6b7280;
+  --bg: #f7fafc;
+  --card-bg: #ffffff;
+  --danger: #ef4444;
+  --success: #16a34a;
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  margin: 0;
+  padding: 24px;
+  background: var(--bg);
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Main container */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 420px 420px; /* main + sidebar + map */
+  gap: 24px;
+  align-items: start;
+}
+
+/* Card */
+.card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  padding: 18px;
+  border: 1px solid rgba(15,23,42,0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Headings */
+h1 { margin: 0 0 12px 0; font-size: 20px; }
+h2 { margin: 0 0 10px 0; font-size: 16px; color: #0b1220; }
+h4 { margin: 12px 0 6px 0; font-size: 14px; color: #0b1220; }
+
+/* Form layout */
+.form-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.form-row label {
+  width: 110px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.form-row input[type="number"],
+.form-row input[type="text"],
+.form-row input[type="password"] {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(15,23,42,0.08);
+  background: #fff;
+  font-size: 14px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid rgba(43,124,255,0.12);
+}
+
+.btn.small { padding: 6px 8px; font-size: 13px; border-radius: 6px; }
+
+/* Status messages */
+.msg-error { color: var(--danger); margin-top: 8px; }
+.msg-success { color: var(--success); margin-top: 8px; }
+
+/* Lists */
+ul { margin: 6px 0 12px 18px; padding: 0; }
+li { margin: 4px 0; font-size: 14px; color: #0f172a; }
+
+/* Sidebar */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  width: 100%;
+}
+
+/* Dungeon details */
+.dungeon-details pre,
+.dungeon-details p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+/* Grid / Dungeon Map */
+.grid {
+  display: grid;
+  gap: 2px;
+  background: rgba(15,23,42,0.03);
+  padding: 6px;
+  border-radius: 6px;
+  box-sizing: border-box;
+  justify-content: center; /* center inside card */
+  max-width: 100%;
+  overflow: auto; /* scroll if map is too big */
+}
+
+.grid .cell {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  background: white;
+  border: 1px solid rgba(15,23,42,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+/* Cell states */
+.cell.start { background: #cfe8ff; border-color: #2b7cff; }
+.cell.goal  { background: #d1fae5; border-color: #10b981; }
+.cell.obstacle { background: #111827; color: white; }
+.cell.path { background: #fde68a; }
+
+/* Make Dungeon Map card full width */
+.sidebar + .sidebar .card {
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 920px) {
+  .container {
+    grid-template-columns: 1fr; /* stack all columns */
+    padding: 12px;
+  }
+
+  .sidebar,
+  .sidebar + .sidebar {
+    width: 100%;
+  }
+
+  .grid {
+    justify-content: center;
+  }
+}
