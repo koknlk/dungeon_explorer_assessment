@@ -4,9 +4,6 @@ using DungeonExplorerBackend.Models.Requests;
 using DungeonExplorerBackend.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests.UnitTests.ExtremeErrorScenarioTests
@@ -71,7 +68,6 @@ namespace Tests.UnitTests.ExtremeErrorScenarioTests
             // Arrange
             var repoMock = new Mock<IDungeonRepository>();
 
-            // Provide a fake IPathfindingService to satisfy DungeonSolverService constructor
             var fakePathfindingService = new Mock<IPathfindingService>();
             var solverMock = new Mock<DungeonSolverService>(MockBehavior.Strict, fakePathfindingService.Object);
 

@@ -2,12 +2,7 @@
 using DungeonExplorerBackend.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests.UnitTests.PerformanceStessTests
@@ -26,7 +21,7 @@ namespace Tests.UnitTests.PerformanceStessTests
         [Fact]
         public void FindPath_MaximumGridSize_50x50_PerformanceWithinLimits()
             {
-            // Arrange - Maximum allowed grid size
+            // Arrange
             var dungeon = new Dungeon
                 {
                 Width = 50,
@@ -48,7 +43,7 @@ namespace Tests.UnitTests.PerformanceStessTests
             var path = _pathfindingService.FindPath(dungeon);
             watch.Stop();
 
-            // Assert - Should complete within reasonable time for 2500 cells
+            // Assert
             Assert.True(watch.ElapsedMilliseconds < 1000,
                 $"Pathfinding took {watch.ElapsedMilliseconds}ms, expected < 1000ms for 50x50 grid");
             Assert.NotEmpty(path);
@@ -58,7 +53,7 @@ namespace Tests.UnitTests.PerformanceStessTests
         [Fact]
         public void FindPath_HighObstacleDensity_PerformanceWithinLimits()
             {
-            // Arrange - 20×20 grid with ~70% obstacles but a guaranteed path
+            // Arrange
             var dungeon = new Dungeon
                 {
                 Width = 20,
@@ -68,9 +63,8 @@ namespace Tests.UnitTests.PerformanceStessTests
                 Obstacles = new List<Position>()
                 };
 
-            var random = new Random(42); // same seed every run = reproducible
+            var random = new Random(42);
 
-            // 1. Fill with 70% random obstacles (skip start and goal)
             for (int x = 0; x < 20; x++)
                 {
                 for (int y = 0; y < 20; y++)
@@ -81,12 +75,10 @@ namespace Tests.UnitTests.PerformanceStessTests
                     }
                 }
 
-            // 2. Carve a simple guaranteed path: go right across each row, then down
-            // This creates a zigzag corridor that A* has to explore around
             for (int row = 0; row < 20; row++)
                 {
                 int y = row;
-                int startX = row % 2 == 0 ? 0 : 19;   // even rows left→right, odd rows right→left
+                int startX = row % 2 == 0 ? 0 : 19;
                 int endX = row % 2 == 0 ? 19 : 0;
                 int step = row % 2 == 0 ? 1 : -1;
 
@@ -95,7 +87,6 @@ namespace Tests.UnitTests.PerformanceStessTests
                     dungeon.Obstacles.RemoveAll(o => o.X == x && o.Y == y);
                     }
 
-                // connect to next row
                 if (row < 19)
                     {
                     int connectorX = row % 2 == 0 ? 19 : 0;
@@ -103,7 +94,6 @@ namespace Tests.UnitTests.PerformanceStessTests
                     }
                 }
 
-            // Final safety: make sure start and goal are really free
             dungeon.Obstacles.RemoveAll(o => (o.X == 0 && o.Y == 0) || (o.X == 19 && o.Y == 19));
 
             // Act
@@ -112,7 +102,7 @@ namespace Tests.UnitTests.PerformanceStessTests
             watch.Stop();
 
             // Assert
-            Assert.NotEmpty(path); // proves a path was found
+            Assert.NotEmpty(path);
             Assert.True(watch.ElapsedMilliseconds < 800,
                 $"Pathfinding took {watch.ElapsedMilliseconds}ms — expected < 800ms on high-density 20×20 grid");
             }
@@ -130,13 +120,13 @@ namespace Tests.UnitTests.PerformanceStessTests
                 Obstacles = new List<Position>()
                 };
 
-            // Act & Measure memory
+            // Act
             var startMemory = GC.GetTotalMemory(true);
             var path = _pathfindingService.FindPath(dungeon);
             var endMemory = GC.GetTotalMemory(true);
             var memoryUsed = endMemory - startMemory;
 
-            // Assert - Should not use excessive memory (< 100MB for worst case)
+            // Assert
             Assert.True(memoryUsed < 100 * 1024 * 1024,
                 $"Memory usage {memoryUsed / 1024 / 1024}MB exceeds 100MB limit");
             Assert.NotEmpty(path);

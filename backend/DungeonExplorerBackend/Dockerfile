@@ -16,6 +16,6 @@ RUN dotnet publish "DungeonExplorerBackend.csproj" -c Release -o /app/publish /p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-# Create directory for SQLite database
+
 RUN mkdir -p /app/data
 ENTRYPOINT ["dotnet", "DungeonExplorerBackend.dll"]

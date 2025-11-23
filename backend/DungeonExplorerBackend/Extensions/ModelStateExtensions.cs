@@ -13,9 +13,7 @@ namespace DungeonExplorerBackend.Extensions
                 .ToDictionary(
                     kvp =>
                     {
-                        // Normalize the key to remove "$." from JSON path
                         var key = kvp.Key.StartsWith("$.") ? kvp.Key.Substring(2) : kvp.Key;
-                        // Replace array brackets with dot notation
                         key = key.Replace("[", ".").Replace("]", "");
                         return key;
                     },

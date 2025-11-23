@@ -35,7 +35,6 @@ namespace DungeonExplorerBackend.Services
                 }
             catch (DungeonPathfindingException)
                 {
-                // Already a structured pathfinding exception, just rethrow
                 throw;
                 }
             catch (Exception ex)

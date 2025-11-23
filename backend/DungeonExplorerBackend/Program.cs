@@ -1,7 +1,7 @@
 ﻿using DungeonExplorerBackend.Contracts;
 using DungeonExplorerBackend.Data;
 using DungeonExplorerBackend.Extensions;
-using DungeonExplorerBackend.Services;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -13,24 +13,24 @@ SQLitePCL.Batteries.Init();
 
 var builder = WebApplication.CreateBuilder(args);
 
-//DATABASE
+//database
 builder.Services.AddDbContext<DungeonContext>(options =>
     options.UseSqlite("Data Source=/app/data/dungeons.db"));
 
-//SERVICES
+//services
 builder.Services.AddDungeonServices();
 
-//AUTH
+//auth
 builder.Services.AddJwtAuthentication();
 
-//AUTHORIZATION POLICIES
+//authorization policies
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("CanCreateDungeon", policy => policy.RequireRole("Admin"));
     options.AddPolicy("CanGetDungeon", policy => policy.RequireRole("Admin"));
 });
 
-//CORS
+//cors
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
@@ -39,7 +39,7 @@ builder.Services.AddCors(options =>
                         .AllowAnyMethod());
 });
 
-//CONTROLLERS
+//controller
 builder.Services.AddControllers();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -47,7 +47,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
         context.ModelState.ToApiResponse();
 });
 
-//SWAGGER
+//swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -57,22 +57,22 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-//DEV ENV
+//dev env
 if (app.Environment.IsDevelopment())
     {
     app.UseSwagger();
     app.UseSwaggerUI();
     }
 
-//MIDDLEWARE
+//middleware
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
-//ROUTES
+//routes
 app.MapControllers();
 
-//SEED DATA
+//Seed data
 using (var scope = app.Services.CreateScope())
     {
     var seeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();

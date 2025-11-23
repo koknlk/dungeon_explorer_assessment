@@ -1,5 +1,4 @@
-﻿using DungeonExplorerBackend.Contracts;
-using DungeonExplorerBackend.Controllers;
+﻿using DungeonExplorerBackend.Controllers;
 using DungeonExplorerBackend.Data;
 using DungeonExplorerBackend.Models.ApiResponseM;
 using DungeonExplorerBackend.Models.Requests;
@@ -9,8 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests.UnitTests.EndtoEndTests
@@ -49,11 +46,9 @@ namespace Tests.UnitTests.EndtoEndTests
                 new Mock<ILogger<DungeonService>>().Object
             );
 
-            // Utilities
             _sanitizer = new InputSanitizer();
             _responseHandler = new ResponseHandler();
 
-            // Controllers
             _createController = new CreateDungeonController(
                 _dungeonService,
                 _sanitizer,
@@ -86,13 +81,13 @@ namespace Tests.UnitTests.EndtoEndTests
                 }
                 };
 
-            // Act - Create dungeon
+            //Create dungeon
             var createResult = await _createController.CreateDungeon(createRequest);
             var createOkResult = Assert.IsType<OkObjectResult>(createResult.Result);
             var createResponse = Assert.IsType<ApiResponse<int>>(createOkResult.Value);
             var dungeonId = createResponse.Data;
 
-            // Act - Get dungeon
+            //Get dungeon
             var getResult = await _getController.GetDungeon(dungeonId);
             var getOkResult = Assert.IsType<OkObjectResult>(getResult.Result);
             var getResponse = Assert.IsType<ApiResponse<DungeonResponse>>(getOkResult.Value);

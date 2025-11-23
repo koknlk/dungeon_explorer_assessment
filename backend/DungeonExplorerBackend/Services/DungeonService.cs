@@ -26,7 +26,6 @@ namespace DungeonExplorerBackend.Services
 
         public async Task<int> CreateDungeonAsync(CreateDungeonRequest request)
             {
-            // Optional: validate width/height/start/goal/obstacles
             if (request.Width < 5 || request.Width > 50 || request.Height < 5 || request.Height > 50)
                 throw new ArgumentException("Dungeon width/height must be between 5 and 50.");
 

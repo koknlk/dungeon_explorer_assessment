@@ -32,7 +32,7 @@ public class AStarPathfindingServiceTests
         var path = _service.FindPath(dungeon);
 
         Assert.NotEmpty(path);
-        Assert.Equal(9, path.Count); // 5x5 grid diagonal = 9 positions
+        Assert.Equal(9, path.Count);
         Assert.Equal(0, path.First().X);
         Assert.Equal(0, path.First().Y);
         Assert.Equal(4, path.Last().X);

@@ -1,14 +1,9 @@
 ﻿using DungeonExplorerBackend.Contracts;
 using DungeonExplorerBackend.Models.Entities;
 using DungeonExplorerBackend.Models.Requests;
-using DungeonExplorerBackend.Models.Responses;
 using DungeonExplorerBackend.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests.UnitTests.Services
@@ -26,7 +21,6 @@ namespace Tests.UnitTests.Services
             _mapperMock = new Mock<DungeonMapper>();
             _loggerMock = new Mock<ILogger<DungeonService>>();
 
-            // Provide a fake IPathfindingService to construct DungeonSolverService
             var fakePathfindingService = new Mock<IPathfindingService>();
             fakePathfindingService.Setup(p => p.FindPath(It.IsAny<Dungeon>()))
                                   .Returns(new List<Position>
@@ -120,7 +114,7 @@ namespace Tests.UnitTests.Services
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(5, result.Solutions.Path.Count); // matches the path returned by fake IPathfindingService
+            Assert.Equal(5, result.Solutions.Path.Count);
             _dungeonRepoMock.Verify(r => r.SaveChangesAsync(), Times.Once);
             }
 
@@ -160,7 +154,7 @@ namespace Tests.UnitTests.Services
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(2, result.Solutions.Path.Count); // matches the existing solution path
+            Assert.Equal(2, result.Solutions.Path.Count);
             }
         }
     }

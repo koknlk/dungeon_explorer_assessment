@@ -21,7 +21,7 @@ public class ResponseHandlerTests
         // Act
         var result = _handler.HandleSuccess(data, message);
 
-        // Assert - it's ActionResult<ApiResponse<int>>
+        // Assert
         var actionResult = Assert.IsType<ActionResult<ApiResponse<int>>>(result);
         var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
 

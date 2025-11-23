@@ -14,7 +14,6 @@ namespace DungeonExplorerBackend.Services
             int? dungeonId = null,
             string errorCode = "DOMAIN_ERROR")
             {
-            // Optional: normalize field names for clarity
             var normalizedDetails = details?.ToDictionary(
                 kvp => kvp.Key.Replace("$.", "").Replace(".", "_").Replace("start", "Start").Replace("x", "X"),
                 kvp => kvp.Value
