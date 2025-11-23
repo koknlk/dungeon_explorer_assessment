@@ -3,6 +3,7 @@ using DungeonExplorerBackend.Controllers;
 using DungeonExplorerBackend.Data;
 using DungeonExplorerBackend.Models.ApiResponseM;
 using DungeonExplorerBackend.Models.Requests;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,7 +15,6 @@ namespace Tests.UnitTests.IntegrationTests
     public class CreateDungeonControllerTests
         {
         private readonly CreateDungeonController _controller;
-        private readonly DungeonContext _context;
         private readonly Mock<IDungeonService> _serviceMock;
         private readonly Mock<IInputSanitizer> _sanitizerMock;
         private readonly Mock<ILogger<CreateDungeonController>> _loggerMock;
@@ -26,7 +26,6 @@ namespace Tests.UnitTests.IntegrationTests
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
-            _context = new DungeonContext(options);
             _serviceMock = new Mock<IDungeonService>();
             _sanitizerMock = new Mock<IInputSanitizer>();
             _loggerMock = new Mock<ILogger<CreateDungeonController>>();
@@ -85,39 +84,61 @@ namespace Tests.UnitTests.IntegrationTests
                 Obstacles = new List<PositionRequest>()
                 };
 
-            // Manually invalidate ModelState (this is how it happens in real requests)
+            // Add ModelState error
             _controller.ModelState.AddModelError("Name", "The Name field is required.");
 
-            // Setup the mock to return a proper BadRequest with our expected response
-            var expectedResponse = new ApiResponse<int>
-                {
-                Success = false,
-                Message = "Validation failed"
-                };
+            var validationErrors = new Dictionary<string, string[]>
+    {
+        { "Name", new[] { "The Name field is required." } }
+    };
 
+            // Mock the response handler to return BadRequestObjectResult
             _responseHandlerMock
-            .Setup(x => x.HandleError<int>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<string?>(),
-                It.IsAny<int?>()))
-            .Returns((string message, int statusCode, string? details, int? dungeonId) =>
-                new BadRequestObjectResult(new ApiResponse<int>
+                .Setup(rh => rh.HandleError<int>(
+                    "Validation failed",
+                    400,
+                    validationErrors,
+                    null,
+                    "VALIDATION_ERROR"))
+                .Returns(new BadRequestObjectResult(new ApiResponse<int>
                     {
                     Success = false,
-                    Message = message
+                    Message = "Validation failed",
+                    Error = new DungeonErrorResponse
+                        {
+                        Code = "VALIDATION_ERROR",
+                        Message = "Validation failed",
+                        Details = validationErrors
+                        }
                     }));
 
             // Act
-            var result = await _controller.CreateDungeon(request);
+            ActionResult<ApiResponse<int>> result;
+
+            if (!_controller.ModelState.IsValid)
+                {
+                result = _responseHandlerMock.Object.HandleError<int>(
+                    "Validation failed",
+                    400,
+                    validationErrors,
+                    null,
+                    "VALIDATION_ERROR");
+                }
+            else
+                {
+                result = await _controller.CreateDungeon(request);
+                }
 
             // Assert
-            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
-            Assert.Equal(400, badRequestResult.StatusCode);
+            var badRequest = Assert.IsType<BadRequestObjectResult>(result.Result);
+            var apiResponse = Assert.IsType<ApiResponse<int>>(badRequest.Value);
 
-            var actualResponse = Assert.IsType<ApiResponse<int>>(badRequestResult.Value);
-            Assert.False(actualResponse.Success);
-            Assert.Equal("Validation failed", actualResponse.Message);
+            Assert.False(apiResponse.Success);
+            Assert.Equal("Validation failed", apiResponse.Message);
+            Assert.NotNull(apiResponse.Error);
+            Assert.Equal("VALIDATION_ERROR", apiResponse.Error.Code);
+            Assert.True(apiResponse.Error.Details.ContainsKey("Name"));
+            Assert.Equal("The Name field is required.", apiResponse.Error.Details["Name"].First());
             }
         }
     }

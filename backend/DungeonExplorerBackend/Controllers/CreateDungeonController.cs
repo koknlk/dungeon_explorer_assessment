@@ -26,29 +26,8 @@ namespace DungeonExplorerBackend.Controllers
             }
 
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<int>>> CreateDungeon(CreateDungeonRequest request)
+        public async Task<ActionResult<ApiResponse<int>>> CreateDungeon([FromBody] CreateDungeonRequest request)
             {
-            if (!ModelState.IsValid)
-                {
-                var errors = ModelState
-                    .Where(x => x.Value.Errors.Count > 0)
-                    .ToDictionary(
-                        kvp => kvp.Key,
-                        kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                    );
-
-                return new BadRequestObjectResult(new ApiResponse<int>
-                    {
-                    Success = false,
-                    Message = "Validation failed",
-                    Error = new DungeonErrorResponse
-                        {
-                        Message = "Validation failed",
-                        Details = System.Text.Json.JsonSerializer.Serialize(errors)
-                        }
-                    });
-                }
-
             try
                 {
                 request.Name = _sanitizer.Sanitize(request.Name);

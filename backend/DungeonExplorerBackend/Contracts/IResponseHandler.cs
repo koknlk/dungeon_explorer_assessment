@@ -7,8 +7,18 @@ namespace DungeonExplorerBackend.Contracts
         {
         ActionResult<ApiResponse<T>> HandleSuccess<T>(T data, string message = "");
 
-        ActionResult<ApiResponse<T>> HandleError<T>(string message, int statusCode = 400, string? details = null, int? dungeonId = null);
+        ActionResult<ApiResponse<T>> HandleError<T>(
+            string message,
+            int statusCode = 400,
+            Dictionary<string, string[]>? details = null,
+            int? dungeonId = null,
+            string errorCode = "DOMAIN_ERROR"
+        );
 
-        ActionResult<ApiResponse<T>> HandleException<T>(Exception ex, ILogger logger, string context);
+        ActionResult<ApiResponse<T>> HandleException<T>(
+            Exception ex,
+            ILogger logger,
+            string context
+        );
         }
     }

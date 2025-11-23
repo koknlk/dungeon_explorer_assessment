@@ -7,12 +7,12 @@ const TerserPlugin = require('terser-webpack-plugin');
 const { AureliaPlugin } = require('aurelia-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
-// config helpers
+
 const ensureArray = (config) => config && (Array.isArray(config) ? config : [config]) || [];
 const when = (condition, config, negativeConfig) =>
   condition ? ensureArray(config) : ensureArray(negativeConfig);
 
-const outDir = path.resolve(__dirname, 'dist'); // hardcoded for localhost
+const outDir = path.resolve(__dirname, 'dist'); 
 const srcDir = path.resolve(__dirname, 'src');
 const baseUrl = '/';
 

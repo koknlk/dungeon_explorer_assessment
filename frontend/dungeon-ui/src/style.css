@@ -1,6 +1,6 @@
-/* src/styles.css */
 
-/* Page layout */
+
+/*page*/
 :root {
   --max-width: 980px;
   --gap: 14px;
@@ -22,17 +22,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Main container */
+/* main container */
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 420px 420px; /* main + sidebar + map */
+  grid-template-columns: 1fr 420px 420px; 
   gap: 24px;
   align-items: start;
 }
 
-/* Card */
+/* card */
 .card {
   background: var(--card-bg);
   border-radius: 10px;
@@ -43,12 +43,12 @@ body {
   flex-direction: column;
 }
 
-/* Headings */
+/* headings */
 h1 { margin: 0 0 12px 0; font-size: 20px; }
 h2 { margin: 0 0 10px 0; font-size: 16px; color: #0b1220; }
 h4 { margin: 12px 0 6px 0; font-size: 14px; color: #0b1220; }
 
-/* Form layout */
+/* form layout */
 .form-row {
   display: flex;
   gap: 10px;
@@ -73,7 +73,7 @@ h4 { margin: 12px 0 6px 0; font-size: 14px; color: #0b1220; }
   font-size: 14px;
 }
 
-/* Buttons */
+/* buttons */
 .btn {
   display: inline-block;
   padding: 8px 12px;
@@ -94,15 +94,15 @@ h4 { margin: 12px 0 6px 0; font-size: 14px; color: #0b1220; }
 
 .btn.small { padding: 6px 8px; font-size: 13px; border-radius: 6px; }
 
-/* Status messages */
+/* status messages */
 .msg-error { color: var(--danger); margin-top: 8px; }
 .msg-success { color: var(--success); margin-top: 8px; }
 
-/* Lists */
+/* lists */
 ul { margin: 6px 0 12px 18px; padding: 0; }
 li { margin: 4px 0; font-size: 14px; color: #0f172a; }
 
-/* Sidebar */
+/* sidebar */
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -110,14 +110,14 @@ li { margin: 4px 0; font-size: 14px; color: #0f172a; }
   width: 100%;
 }
 
-/* Dungeon details */
+/* dungeon details */
 .dungeon-details pre,
 .dungeon-details p {
   margin: 6px 0;
   font-size: 14px;
 }
 
-/* Grid / Dungeon Map */
+/* grid Map */
 .grid {
   display: grid;
   gap: 2px;
@@ -125,9 +125,9 @@ li { margin: 4px 0; font-size: 14px; color: #0f172a; }
   padding: 6px;
   border-radius: 6px;
   box-sizing: border-box;
-  justify-content: center; /* center inside card */
+  justify-content: center; 
   max-width: 100%;
-  overflow: auto; /* scroll if map is too big */
+  overflow: auto; 
 }
 
 .grid .cell {
@@ -142,21 +142,21 @@ li { margin: 4px 0; font-size: 14px; color: #0f172a; }
   font-size: 10px;
 }
 
-/* Cell states */
+/* cell states */
 .cell.start { background: #cfe8ff; border-color: #2b7cff; }
 .cell.goal  { background: #d1fae5; border-color: #10b981; }
 .cell.obstacle { background: #111827; color: white; }
 .cell.path { background: #fde68a; }
 
-/* Make Dungeon Map card full width */
+/* make Map card full width */
 .sidebar + .sidebar .card {
   width: 100%;
 }
 
-/* Responsive */
+/* responsive */
 @media (max-width: 920px) {
   .container {
-    grid-template-columns: 1fr; /* stack all columns */
+    grid-template-columns: 1fr; 
     padding: 12px;
   }
 

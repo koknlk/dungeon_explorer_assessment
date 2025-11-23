@@ -3,11 +3,11 @@
 
   <div class="container">
 
-    <!-- MAIN COLUMN -->
+    <!-- main column -->
     <div>
       <h1>Dungeon Explorer SPA</h1>
 
-      <!-- LOGIN -->
+      <!-- login -->
       <section class="card">
         <h2>Login</h2>
         <div class="form-row">
@@ -24,7 +24,7 @@
         <div if.bind="loginSuccess" class="msg-success">${loginSuccess}</div>
       </section>
 
-      <!-- CREATE DUNGEON -->
+      <!-- create dungeon -->
       <section class="card">
         <h2>Create Dungeon</h2>
         <div class="form-row"><label>Name</label><input value.bind="dungeonName" /></div>
@@ -49,15 +49,18 @@
 
         <div if.bind="createError" class="msg-error">
           ${createError}
-          <div if.bind="createErrorDetails" class="msg-error-details"><small>${createErrorDetails}</small></div>
+          <div if.bind="createErrorDetails" class="msg-error-details">
+            <small>${createErrorDetails}</small>
+          </div>
+
         </div>
         <div if.bind="createSuccess" class="msg-success">${createSuccess}</div>
       </section>
     </div>
 
-    <!-- SIDEBAR -->
+    <!-- sidebar -->
     <div class="sidebar">
-      <!-- FETCH -->
+      <!-- fetch -->
       <section class="card">
         <h2>Get Dungeon by ID</h2>
         <div class="form-row">
@@ -68,11 +71,13 @@
 
         <div if.bind="fetchError" class="msg-error">
           ${fetchError}
-          <div if.bind="fetchErrorDetails" class="msg-error-details"><small>${fetchErrorDetails}</small></div>
+          <div if.bind="fetchErrorDetails" class="msg-error-details">
+            <small>${fetchErrorDetails}</small>
+          </div>
         </div>
       </section>
 
-      <!-- DETAILS -->
+      <!-- dungeon details -->
       <section class="card dungeon-details" if.bind="fetchedDungeon && fetchedDungeon.id">
         <h2>Dungeon Details</h2>
         <p><strong>ID:</strong> ${fetchedDungeon.id}</p>
@@ -93,7 +98,7 @@
       </section>
     </div>
 
-    <!-- MAP -->
+    <!-- map -->
     <div class="sidebar">
       <section class="card" if.bind="fetchedDungeon && fetchedDungeon.id">
         <h4>Dungeon Map</h4>

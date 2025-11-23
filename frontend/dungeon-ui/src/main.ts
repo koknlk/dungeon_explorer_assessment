@@ -4,9 +4,7 @@ import { PLATFORM } from 'aurelia-pal';
 export function configure(aurelia: Aurelia) {
   aurelia.use
     .standardConfiguration()
-    //.feature(PLATFORM.moduleName('resources/index'));
 
-  // Hardcoded flags (instead of environment.json)
   const debug = true;
   const testing = false;
 

@@ -69,20 +69,26 @@ namespace Tests.UnitTests.IntegrationTests
             {
             // Arrange
             var invalidId = 0;
-            var expectedResponse = new ApiResponse<object> { Success = false, Message = "Invalid dungeon ID" };
 
-            // Fix: match all parameters with It.IsAny<>
             _responseHandlerMock
                 .Setup(x => x.HandleError<DungeonResponse>(
                     It.IsAny<string>(),
                     It.IsAny<int>(),
-                    It.IsAny<string?>(),
-                    It.IsAny<int?>()))
-                .Returns((string message, int statusCode, string? details, int? dungeonId) =>
-                    new BadRequestObjectResult(new ApiResponse<object>
+                    It.IsAny<Dictionary<string, string[]>?>(),
+                    It.IsAny<int?>(),
+                    It.IsAny<string>()))
+                .Returns((string message, int statusCode, Dictionary<string, string[]>? details, int? dungeonId, string errorCode) =>
+                    new BadRequestObjectResult(new ApiResponse<DungeonResponse>
                         {
                         Success = false,
-                        Message = message
+                        Message = message,
+                        Error = new DungeonErrorResponse
+                            {
+                            Code = errorCode,
+                            Message = message,
+                            Details = details,
+                            DungeonId = dungeonId
+                            }
                         }));
 
             // Act
@@ -90,7 +96,8 @@ namespace Tests.UnitTests.IntegrationTests
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
-            var response = Assert.IsType<ApiResponse<object>>(badRequestResult.Value);
+            var response = Assert.IsType<ApiResponse<DungeonResponse>>(badRequestResult.Value);
+
             Assert.False(response.Success);
             Assert.Contains("Invalid dungeon ID", response.Message);
             }

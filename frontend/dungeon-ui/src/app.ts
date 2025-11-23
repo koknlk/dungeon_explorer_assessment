@@ -3,9 +3,8 @@ import { DungeonApi } from './Services/dungeon-api';
 export class App {
   api = new DungeonApi();
 
-  // ------------------------
-  // LOGIN
-  // ------------------------
+
+  //login
   username = '';
   password = '';
   loginError: string | null = null;
@@ -22,9 +21,8 @@ export class App {
     }
   }
 
-  // ------------------------
-  // CREATE DUNGEON
-  // ------------------------
+  
+  //create dungeon
   dungeonName = '';
   width = 10;
   height = 10;
@@ -64,34 +62,29 @@ export class App {
 
     if (response.success) {
       this.createSuccess = `Dungeon created with ID: ${response.data}`;
-    } else {
-      this.createError =
-        response.error?.message || response.message || 'Failed to create dungeon';
-
-      // ✅ PARSE validation details nicely
-      if (response.error?.details) {
-        try {
-          const parsed = JSON.parse(response.error.details);
-
-          this.createErrorDetails = Object.entries(parsed)
-            .map(([field, messages]: any) =>
-              `${field}: ${messages.join(', ')}`
-            )
-            .join(' | ');
-        } catch {
-          this.createErrorDetails = response.error.details;
-        }
-      }
+    } else { 
+      this.createError = response.error?.message || response.message || 'Failed to create dungeon'; 
+      if (response.success) {
+  this.createSuccess = `Dungeon created with ID: ${response.data}`;
+} else { 
+  this.createError = response.error?.message || response.message || 'Failed to create dungeon'; 
+  if (response.error?.details && typeof response.error.details === 'object') {
+    this.createErrorDetails = Object.entries(response.error.details)
+      .map(([field, messages]: [string, any]) => {
+        const msg = Array.isArray(messages) ? messages.join(', ') : String(messages);
+        return `${field}: ${msg}`;
+      })
+      .join(' | ');
+  }
+}
     }
   } catch (err: any) {
-    this.createError = err.message || 'Failed to create dungeon';
+    this.createError = err?.message || 'Failed to create dungeon';
   }
 }
 
 
-  // ------------------------
-  // FETCH DUNGEON
-  // ------------------------
+  //retrieve dungeon by id
   fetchDungeonId: number | null = null;
   fetchedDungeon: any = null;
   dungeonGrid: number[][] = [];
@@ -110,7 +103,7 @@ export class App {
       const response = await this.api.getDungeon(this.fetchDungeonId);
 
       if (!response.success) {
-        this.fetchError = response.error?.message || response.message || 'Failed to fetch dungeon'; 
+        this.fetchError = response.message || 'Failed to fetch dungeon'; 
         return;
       }
 
@@ -125,9 +118,7 @@ export class App {
         goal: data.goal ?? { x: 9, y: 9 },
         obstacles: data.obstacles ?? [],
         solutions: data.solutions ?? { path: [] }
-      };
-
-      // Build grid
+      }; 
       for (let r = 0; r < this.fetchedDungeon.height; r++) {
         const row = Array(this.fetchedDungeon.width).fill(0);
         this.dungeonGrid.push(row);
@@ -137,9 +128,8 @@ export class App {
     }
   }
 
-  // ------------------------
-  // GRID HELPERS
-  // ------------------------
+
+  //grid helpers
   get gridColumns(): string {
     if (!this.fetchedDungeon) return '';
     return `grid-template-columns: repeat(${this.fetchedDungeon.width}, 24px)`;

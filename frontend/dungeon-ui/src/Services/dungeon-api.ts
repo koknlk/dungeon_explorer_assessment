@@ -1,10 +1,10 @@
 export class DungeonApi {
+  //base entry endpoint
   private baseUrl = 'http://localhost:8088/api/v1/dungeons';
   private token: string | null = null;
 
-  // ------------------------
-  // LOGIN
-  // ------------------------
+ 
+  //login
   async login(username: string, password: string) {
     const res = await fetch(`${this.baseUrl}/login`, {
       method: 'POST',
@@ -12,16 +12,15 @@ export class DungeonApi {
       body: JSON.stringify({ username, password })
     });
 
-    const data = await res.json(); // always parse JSON
+    const data = await res.json(); 
     if (!res.ok) throw new Error(data.message || 'Login failed');
 
     this.token = data.token;
     return data;
   }
 
-  // ------------------------
-  // CREATE DUNGEON
-  // ------------------------
+
+  // create dungeon
   async createDungeon(dungeon: any) {
     const res = await fetch(`${this.baseUrl}/create`, {
       method: 'POST',
@@ -32,19 +31,18 @@ export class DungeonApi {
       body: JSON.stringify(dungeon)
     });
 
-    const data = await res.json(); // always parse JSON
+    const data = await res.json(); 
     return data;
   }
 
-  // ------------------------
-  // GET DUNGEON BY ID
-  // ------------------------
+
+  //retrieve dungeon by id 
   async getDungeon(id: number) {
     const res = await fetch(`${this.baseUrl}/${id}`, {
       headers: this.token ? { Authorization: `Bearer ${this.token}` } : {}
     });
 
-    const data = await res.json(); // always parse JSON
+    const data = await res.json(); 
     return data;
   }
 }
