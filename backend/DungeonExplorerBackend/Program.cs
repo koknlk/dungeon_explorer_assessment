@@ -75,6 +75,8 @@ app.MapControllers();
 //Seed data
 using (var scope = app.Services.CreateScope())
     {
+    var context = scope.ServiceProvider.GetRequiredService<DungeonContext>();
+    await context.Database.EnsureCreatedAsync();
     var seeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
     await seeder.SeedAsync();
     }
